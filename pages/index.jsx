@@ -1,8 +1,27 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import Image from 'next/image'
+import AppLayout from '../components/AppLayout'
+import Button from '../components/Button'
+import GitHub from '../components/Icons/Github'
+import { colors } from '../styles/theme'
+import { authStateChanged, loginWithGitHub } from '../firebase/client'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
+	const [user, setUser] = useState(undefined)
+
+	useEffect(() => {
+		authStateChanged(setUser)
+	}, [])
+
+	const handleClick = () => {
+		loginWithGitHub()
+			.then(user => {
+				setUser(user)
+			})
+			.catch(err => console.log(err))
+	}
+
 	return (
 		<>
 			<Head>
@@ -11,14 +30,62 @@ export default function Home() {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className={styles.main}>
-				<h1 className={styles.title}>
-					<Link href='https://nextjs.org'>Devter</Link>
-				</h1>
-				<nav className={styles.nav}>
-					<Link href='/timeline'>Timeline</Link>
-				</nav>
-			</main>
+			<AppLayout>
+				<section>
+					<Image
+						className='logo'
+						src='/logo.png'
+						width='160px'
+						height='140px'
+						alt="Midudev's logo"
+					/>
+					<h1>Devter</h1>
+					<h2>Talk about development with developers 👨‍💻👩‍💻</h2>
+					<div>
+						{user === null && (
+							<Button onClick={handleClick}>
+								<GitHub height='2rem' width='2rem' fill='#fff' />
+								Login with GitHub
+							</Button>
+						)}
+						{user && user.avatar && (
+							<div>
+								<img src={user.avatar} alt={user.username} />
+								<strong>{user.username}</strong>
+							</div>
+						)}
+					</div>
+				</section>
+			</AppLayout>
+
+			<style jsx>
+				{`
+					h1 {
+						color: ${colors.primary};
+						font-weight: 800;
+						font-size: 2rem;
+						margin-bottom: 1rem;
+					}
+					h2 {
+						font-size: 1.5rem;
+						width: 80%;
+						color: ${colors.secondary};
+						margin: 0;
+					}
+					section {
+						display: grid;
+						place-items: center;
+						place-content: center;
+						height: 100%;
+					}
+					div {
+						padding: 1rem;
+					}
+					.logo {
+						height: 100px;
+					}
+				`}
+			</style>
 		</>
 	)
 }
