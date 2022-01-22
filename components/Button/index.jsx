@@ -1,11 +1,11 @@
 import { colors, fonts } from '../../styles/theme'
 
-export default function Button({ children, onClick }) {
+export default function Button ( { children, onClick } ) {
 	return (
 		<>
-			<button onClick={onClick}>{children}</button>
+			<button onClick={ onClick }>{ children }</button>
 			<style jsx>
-				{`
+				{ `
 					button {
 						align-items: center;
 						gap: 0.5rem;
