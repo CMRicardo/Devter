@@ -1,6 +1,6 @@
 import css from "styled-jsx/css"
-import { fonts, colors, breakpoints } from "../../styles/theme"
-import { addOpacityToColor } from "../../styles/utils"
+import { fonts, colors, breakpoints } from "styles/theme"
+import { addOpacityToColor } from "styles/utils"
 
 const backgroundColor = addOpacityToColor(colors.primary, 0.3)
 
@@ -16,6 +16,7 @@ export const globalStyles = css.global`
       radial-gradient(${backgroundColor} 1px, #fdf 1px);
     background-position: 0 0, 25px 25px;
     background-size: 50px 50px;
+    overflow: hidden;
   }
   a {
     color: inherit;
@@ -25,6 +26,10 @@ export const globalStyles = css.global`
   * {
     box-sizing: border-box;
     margin: 0;
+  }
+  textarea,
+  input {
+    font-family: ${fonts.base};
   }
 `
 
@@ -42,6 +47,7 @@ export default css`
     width: 100%;
     height: 100%;
     margin: 0;
+    overflow-y: auto;
   }
 
   @media screen and (min-width: ${breakpoints.mobile}) {
