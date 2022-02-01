@@ -63,12 +63,9 @@ export const fetchLatestDevits = () => {
         const data = doc.data()
         const id = doc.id
         const { createdAt } = data
-        const date = new Date(createdAt.seconds * 1000)
-        const normalizedCreatedAt = new Intl.DateTimeFormat("es-HN").format(
-          date
-        )
+        createdAt.toDate()
 
-        return { ...data, id, createdAt: normalizedCreatedAt }
+        return { ...data, id, createdAt: +createdAt.toDate() }
       })
     })
     .catch((err) => console.log(err.message))
