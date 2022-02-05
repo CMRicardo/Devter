@@ -8,7 +8,7 @@ import { colors } from "styles/theme"
 
 import AppLayout from "components/AppLayout"
 import Button from "components/Button"
-import GitHub from "components/Icons/Github"
+import GitHub from "components/Icons/GitHub"
 import Logo from "components/Icons/Logo"
 
 import useUser, { USER_STATES } from "hooks/useUser"

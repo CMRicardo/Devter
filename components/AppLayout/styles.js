@@ -48,6 +48,8 @@ export default css`
     height: 100%;
     margin: 0;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   @media screen and (min-width: ${breakpoints.mobile}) {

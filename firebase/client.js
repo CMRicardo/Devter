@@ -1,6 +1,14 @@
 import { initializeApp } from "@firebase/app"
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore"
+import {
+  addDoc,
+  query,
+  collection,
+  getDocs,
+  getFirestore,
+  orderBy,
+} from "firebase/firestore"
 import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth"
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -13,9 +21,11 @@ const firebaseConfig = {
   storageBucket: "devter-3cc55.appspot.com",
 }
 
-initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
+const storage = getStorage(app)
 const db = getFirestore()
 const colRef = collection(db, "devits")
+const q = query(colRef, orderBy("createdAt", "desc"))
 
 const auth = getAuth()
 
@@ -42,22 +52,23 @@ export const loginWithGitHub = () => {
   return signInWithPopup(auth, githubProvider)
 }
 
-export const addDevit = ({ avatar, content, userId, userName }) => {
+export const addDevit = ({ avatar, content, img, userId, userName }) => {
   return addDoc(colRef, {
     avatar,
     content,
-    userId,
-    userName,
     createdAt: new Date(),
+    img,
     likesCount: 0,
     sharesCount: 0,
+    userId,
+    userName,
   })
     .then(() => console.log("It worked!!!"))
     .catch(() => console.log("It didn't work"))
 }
 
 export const fetchLatestDevits = () => {
-  return getDocs(colRef)
+  return getDocs(q)
     .then(({ docs }) => {
       return docs.map((doc) => {
         const data = doc.data()
@@ -69,4 +80,10 @@ export const fetchLatestDevits = () => {
       })
     })
     .catch((err) => console.log(err.message))
+}
+
+export const uploadImage = (file) => {
+  const storageRef = ref(storage, `/images/${file.name}`)
+  const uploadTask = uploadBytesResumable(storageRef, file)
+  return uploadTask
 }

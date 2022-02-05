@@ -1,11 +1,11 @@
 .textarea {
-  border: 0;
   font-size: 1rem;
   min-height: 13rem;
   outline: 0;
   padding: 1rem;
   resize: none;
   width: 100%;
+  border-radius: 10px;
 }
 .div {
   padding: 1rem;
